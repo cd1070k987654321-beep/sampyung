@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>명절놀이</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #0b0f1a;
+  font-family: 'Inter', sans-serif;
+  color: #f2f2f2;
+  overflow-x: hidden;
+}
+
+#bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(255,255,255,.06), transparent),
+    radial-gradient(700px 400px at 80% 90%, rgba(255,255,255,.05), transparent);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.wrapper {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+/* TITLE */
+.title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title h1 {
+  font-size: 28px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.title span {
+  font-size: 13px;
+  opacity: .6;
+}
+
+.title-divider {
+  width: 32px;
+  height: 1px;
+  background: rgba(255,255,255,.25);
+  margin: 14px auto 0;
+}
+
+.info {
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 36px 0 44px;
+  opacity: .85;
+}
+
+.section-title {
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  opacity: .6;
+}
+
+/* PLAYER SLIDER */
+.player-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: scroll;
+  padding-bottom: 16px;
+}
+
+.player-slider::-webkit-scrollbar { display: none; }
+
+.player-card {
+  min-width: 180px;
+  height: 270px;
+  border-radius: 12px;
+  background: #111;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+}
+
+/* PLAYER IMAGE */
+.player-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(20%) brightness(.85);
+}
+
+/* OVERLAY INFO */
+.player-info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.85),
+    rgba(0,0,0,.0)
+  );
+}
+
+.player-name {
+  font-size: 15px;
+  letter-spacing: .5px;
+}
+
+.player-stars {
+  font-size: 13px;
+  opacity: .85;
+}
+
+/* LINEUP LIST */
+.lineup {
+  margin-top: 36px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  padding: 22px 0;
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  opacity: .85;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<audio id="bgm" loop autoplay muted playsinline>
+  <source src="bgm/bgm.mp3" type="audio/mpeg">
+</audio>
+
+<div class="wrapper">
+
+  <div class="title">
+    <h1>명절놀이</h1>
+    <span>FUTSAL SESSION 000</span>
+    <div class="title-divider"></div>
+  </div>
+
+  <div class="info">
+    일시 · 2026년 02월 15일 (일)<br>
+    장소 · 000 풋살장
+  </div>
+
+  <div class="section-title">LINEUP</div>
+  <div class="player-slider" id="slider">
+    <div class="player-card">
+      <img src="players/02.jpg">
+      <div class="player-info">
+        <div class="player-name">곽동현</div>
+        <div class="player-stars">★★★★★</div>
+      </div>
+    </div>
+
+    <div class="player-card">
+      <img src="players/03.jpg">
+      <div class="player-info">
+        <div class="player-name">신동수</div>
+        <div class="player-stars">★★★★☆</div>
+      </div>
+    </div>
+
+    <div class="player-card">
+      <img src="players/04.png">
+      <div class="player-info">
+        <div class="player-name">이재현</div>
+        <div class="player-stars">★★★★☆</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lineup">
+    <div class="player-row"><div>곽동현</div><div>★★★★★</div></div>
+    <div class="player-row"><div>신동수</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>이재현</div><div>★★★★☆</div></div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+<script>
+/* BGM */
+const bgm = document.getElementById('bgm');
+bgm.volume = 0.6;
+document.addEventListener('touchstart', () => {
+  bgm.muted = false;
+  bgm.play().catch(()=>{});
+}, { once:true });
+
+/* THREE PARTICLES */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.getElementById('bg'),
+  alpha: true
+});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+
+const geo = new THREE.BufferGeometry();
+const count = 1400;
+const pos = [];
+for(let i=0;i<count;i++){
+  pos.push(
+    (Math.random()-0.5)*10,
+    (Math.random()-0.5)*10,
+    (Math.random()-0.5)*10
+  );
+}
+geo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+
+const mat = new THREE.PointsMaterial({
+  size: 0.015,
+  opacity: 0.6,
+  transparent: true
+});
+
+const points = new THREE.Points(geo, mat);
+scene.add(points);
+
+function animate(){
+  requestAnimationFrame(animate);
+  points.rotation.y += 0.0006;
+  points.rotation.x += 0.0003;
+  renderer.render(scene, camera);
+}
+animate();
+
+const slider = document.getElementById('slider');
+
+// 🔁 카드 복제 (무한 루프용)
+slider.innerHTML += slider.innerHTML;
+
+let speed = 0.3; // 숫자 작을수록 천천히
+let isPaused = false;
+
+function loopScroll() {
+  if (!isPaused) {
+    slider.scrollLeft += speed;
+
+    // 절반 지점 넘으면 처음으로 순간 이동
+    if (slider.scrollLeft >= slider.scrollWidth / 2) {
+      slider.scrollLeft = 0;
+    }
+  }
+  requestAnimationFrame(loopScroll);
+}
+
+loopScroll();
+
+/* 👆 사용자가 터치하면 잠깐 멈춤 */
+slider.addEventListener('touchstart', () => isPaused = true);
+slider.addEventListener('touchend', () => isPaused = false);
+slider.addEventListener('mouseenter', () => isPaused = true);
+slider.addEventListener('mouseleave', () => isPaused = false);
+
+</script>
+
+</body>
+</html>
