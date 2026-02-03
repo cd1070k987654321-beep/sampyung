@@ -4,6 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>명절놀이</title>
+<!-- 카톡썸네일 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="삼평 명절놀이 · 초대장">
+<meta property="og:description" content="2026년 설 명절놀이, 라인업과 장소를 확인하세요.">
+<meta property="og:image" content="https://YOUR_GITHUB_ID.github.io/REPO_NAME/og-thumbnail.jpg">
+<meta property="og:url" content="https://YOUR_GITHUB_ID.github.io/REPO_NAME/">
+
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
@@ -83,6 +90,24 @@ body::after {
   margin-bottom: 12px;
   opacity: .6;
 }
+
+/* 플레이어 별색깔 */
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  opacity: .85;
+}
+
+.player-row div:last-child {
+  color: #ffd166; /* 골드 */
+  letter-spacing: 1px;
+  text-shadow:
+    0 0 6px rgba(255, 209, 102, 0.5),
+    0 0 12px rgba(255, 209, 102, 0.25);
+}
+
 
 /* 맵박스 */
 .map-box {
@@ -165,24 +190,29 @@ body::after {
 
 
 /* PLAYER SLIDER */
-.player-slider {
-  display: flex;
-  gap: 16px;
-  overflow-x: scroll;
-  padding-bottom: 16px;
-}
-
-.player-slider::-webkit-scrollbar { display: none; }
 
 .player-card {
-  min-width: 180px;
+  min-width: 180px;   /* 디자인 유지 */
+  max-width: 180px;   /* ← 이게 포인트 */
   height: 270px;
+
   border-radius: 12px;
   background: #111;
   overflow: hidden;
   position: relative;
   box-shadow: 0 20px 40px rgba(0,0,0,.45);
+
+  flex-shrink: 0;     /* ← 슬라이더에서 필수 */
 }
+.player-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: scroll;
+  will-change: transform;
+  overflow-x: scroll;
+}
+
+
 
 /* PLAYER IMAGE */
 .player-card img {
@@ -212,8 +242,14 @@ body::after {
 
 .player-stars {
   font-size: 13px;
-  opacity: .85;
+  color: #ffd166;
+  letter-spacing: 1px;
+  text-shadow:
+    0 0 6px rgba(255, 209, 102, 0.5),
+    0 0 12px rgba(255, 209, 102, 0.25);
 }
+
+
 
 /* LINEUP LIST */
 .lineup {
@@ -230,12 +266,116 @@ body::after {
   font-size: 14px;
   opacity: .85;
 }
-.player-slider {
-  display: flex;
-  gap: 16px;
-  padding-bottom: 16px;
-  will-change: transform;
+
+/* 참가비 */
+
+.pay-box {
+  margin-top: 28px;
 }
+
+.pay-card {
+  background: rgba(17, 17, 17, 0.75);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.pay-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.pay-row:last-of-type {
+  border-bottom: none;
+}
+
+.pay-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  opacity: .6;
+  white-space: nowrap;
+}
+
+.pay-value {
+  font-size: 14px;
+  opacity: .92;
+  text-align: right;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+/* 계좌(아이콘 + 텍스트 한 줄 정렬) */
+.pay-value.account-wrap {
+  display: flex;              /* ❗ inline-flex ❌ */
+  align-items: center;
+  justify-content: flex-end;  /* 🔥 우측 정렬의 핵심 */
+  gap: 6px;
+  text-align: right;
+  width: 100%;                /* 🔥 이게 결정타 */
+}
+
+
+.bank-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.account-text {
+  white-space: nowrap;
+}
+
+
+.copy-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  background: rgba(255, 209, 102, 0.08);
+  color: #ffd166;
+  border-radius: 12px;
+  font-size: 14px;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 209, 102, 0.14);
+  border-color: rgba(255, 209, 102, 0.55);
+}
+
+.copy-btn:active {
+  transform: scale(0.98);
+}
+
+.copy-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.12);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
 
 </style>
 </head>
@@ -300,11 +440,45 @@ body::after {
 
   <div class="lineup">
     <div class="player-row"><div>곽동현</div><div>★★★★★</div></div>
+    <div class="player-row"><div>김우재</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>손현 </div><div>★★★★☆</div></div>
+    <div class="player-row"><div>이승엽</div><div>★★★★☆</div></div>
     <div class="player-row"><div>신동수</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>신동준</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>안성현</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>윤성안</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>이재현</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>이준환</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>정태윤</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>최승한</div><div>★★★★☆</div></div>
+    <div class="player-row"><div>한호승</div><div>★★★★☆</div></div>
     <div class="player-row"><div>이재현</div><div>★★★★☆</div></div>
   </div>
-
 </div>
+
+<!-- 참가비 / 계좌 -->
+  <div class="pay-box">
+    <div class="section-title">PAY</div>
+
+    <div class="pay-card">
+      <div class="pay-row">
+        <div class="pay-label">참가비</div>
+        <div class="pay-value">10,000원</div>
+      </div>
+
+     <div class="pay-value account-wrap" id="accountText">
+       <img src="toss.png" alt="토스" class="bank-icon">
+       <span class="account-text">토스뱅크 1000-6585-4732 (곽동현)</span>
+      </div>
+
+
+      <button class="copy-btn" id="copyBtn" type="button">
+        계좌번호 복사
+      </button>
+
+      <div class="copy-toast" id="copyToast">복사됨 </div>
+    </div>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
@@ -367,107 +541,37 @@ document.addEventListener('click', startBGM);
 
 
 /* =========================
-   THREE.JS PARTICLES BG
-========================= */
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-camera.position.z = 5;
-
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.getElementById('bg'),
-  alpha: true
-});
-renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(devicePixelRatio);
-
-const geo = new THREE.BufferGeometry();
-const count = 1400;
-const pos = [];
-
-for (let i = 0; i < count; i++) {
-  pos.push(
-    (Math.random() - 0.5) * 10,
-    (Math.random() - 0.5) * 10,
-    (Math.random() - 0.5) * 10
-  );
-}
-
-geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-
-const mat = new THREE.PointsMaterial({
-  size: 0.015,
-  opacity: 0.6,
-  transparent: true
-});
-
-const points = new THREE.Points(geo, mat);
-scene.add(points);
-
-function animateBG() {
-  requestAnimationFrame(animateBG);
-  points.rotation.y += 0.0006;
-  points.rotation.x += 0.0003;
-  renderer.render(scene, camera);
-}
-animateBG();
-
-window.addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
-
-
-/* =========================
-   LINEUP SLIDER (PC + Mobile)
+   LINEUP AUTO SLIDER (FINAL)
 ========================= */
 const slider = document.getElementById('slider');
 slider.innerHTML += slider.innerHTML; // 무한 루프용 복제
 
-let speed = 0.3;
+let speed = 1;
 let isPaused = false;
-let x = 0;
 
-function isMobile() {
-  return /iPhone|iPad|Android/i.test(navigator.userAgent);
-}
-
-/* ---- 모바일: transform 기반 ---- */
-function mobileLoop() {
-  if (!isPaused) {
-    x -= speed;
-    const half = slider.scrollWidth / 2;
-    if (Math.abs(x) >= half) x = 0;
-    slider.style.transform = `translateX(${x}px)`;
-  }
-  requestAnimationFrame(mobileLoop);
-}
-
-/* ---- PC: scrollLeft 기반 ---- */
-function pcLoop() {
+function autoLoop() {
   if (!isPaused) {
     slider.scrollLeft += speed;
+
     if (slider.scrollLeft >= slider.scrollWidth / 2) {
       slider.scrollLeft = 0;
     }
   }
-  requestAnimationFrame(pcLoop);
+  requestAnimationFrame(autoLoop);
 }
 
-if (isMobile()) {
-  slider.style.overflow = 'hidden';
-  mobileLoop();
-} else {
-  pcLoop();
-}
+autoLoop();
 
 /* ---- 인터랙션 시 일시정지 ---- */
-slider.addEventListener('touchstart', () => isPaused = true);
-slider.addEventListener('touchend', () => isPaused = false);
 slider.addEventListener('mouseenter', () => isPaused = true);
 slider.addEventListener('mouseleave', () => isPaused = false);
+slider.addEventListener('touchstart', () => isPaused = true);
+slider.addEventListener('touchend', () => isPaused = false);
+
+
 </script>
 
 
 </body>
 </html>
+
