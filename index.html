@@ -270,7 +270,14 @@ body::after {
 /* 참가비 */
 
 .pay-box {
-  margin-top: 28px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.12);
+  padding-bottom: env(safe-area-inset-bottom); /* 아이폰 홈바 대응 */
 }
 
 .pay-card {
@@ -374,6 +381,54 @@ body::after {
 .copy-toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(-4px);
+}
+
+.team-wrapper {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.team-box {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.team-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 12px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.left-team .team-title {
+  color: #6fd0ff;
+}
+
+.right-team .team-title {
+  color: #ff9f9f;
+}
+
+.team-player {
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.team-player.placeholder {
+  opacity: 0.5;
+  border: 1px dashed rgba(255,255,255,0.3);
+}
+
+
+/* 공백 */
+.page-spacer {
+  height: 60vh; /* 화면의 60% 만큼 여백 */
 }
 
 
@@ -549,7 +604,7 @@ body::after {
 
      <div class="pay-value account-wrap" id="accountText">
        <img src="toss.png" alt="토스" class="bank-icon">
-       <span class="account-text">토스뱅크 1000-6585-4732 (곽동현)</span>
+       <span class="account-text">토스뱅크 1000-6585-4732 </span><br>
       </div>
 
 
@@ -561,9 +616,56 @@ body::after {
     </div>
   </div>
 
+  <!-- TEAM SECTION (미확정) -->
+<div class="section-title">TEAM</div>
+
+<div class="team-wrapper">
+  
+  <!-- LEFT TEAM -->
+  <div class="team-box left-team">
+    <div class="team-title">TEAM A</div>
+
+    <div class="team-player placeholder">
+      추후 배정
+    </div>
+  </div>
+
+  <!-- RIGHT TEAM -->
+  <div class="team-box right-team">
+    <div class="team-title">TEAM B</div>
+
+    <div class="team-player placeholder">
+      추후 배정
+    </div>
+  </div>
+
+</div>
+
+<div class="page-spacer"></div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
 <script>
+  const copyBtn = document.getElementById("copyBtn");
+  const accountText = document.querySelector(".account-text").innerText;
+  const copyToast = document.getElementById("copyToast");
+
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(accountText).then(() => {
+      copyToast.classList.add("show");
+
+      setTimeout(() => {
+        copyToast.classList.remove("show");
+      }, 1500);
+    });
+  });
+</script>
+
+
+<script>
+
+
 
 /* =========================
    그머냐 지도
@@ -648,6 +750,7 @@ slider.addEventListener('mouseenter', () => isPaused = true);
 slider.addEventListener('mouseleave', () => isPaused = false);
 slider.addEventListener('touchstart', () => isPaused = true);
 slider.addEventListener('touchend', () => isPaused = false);
+
 
 
 </script>
