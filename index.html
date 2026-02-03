@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v1.0.0/mapbox-gl-language.js"></script>
+
 
 <style>
 * { box-sizing: border-box; }
@@ -162,8 +164,6 @@ body::after {
 }
 
 
-
-
 /* PLAYER SLIDER */
 .player-slider {
   display: flex;
@@ -251,14 +251,15 @@ body::after {
 <div class="wrapper">
 
   <div class="title">
-    <h1>명절놀이</h1>
-    <span>FUTSAL SESSION 000</span>
+    <h1>삼평 명절놀이</h1>
+    <span>2026년 설기념 풋살</span>
     <div class="title-divider"></div>
   </div>
 
  <div class="info">
-  일시 · 2026년 02월 15일 (일)<br>
-  장소 · 2026년 02월 15일 (일)
+  일시 · 2026년 02월 15일 (일) <br>
+  장소 · 경기도 성남시 수정구 사송동 483 킹주니어1호점<br>
+  시간 · 시간미정
 </div>
 
 
@@ -308,6 +309,7 @@ body::after {
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
 <script>
+
 /* =========================
    그머냐 지도
 ========================= */
@@ -325,6 +327,12 @@ const map = new mapboxgl.Map({
   pitch: 50,
   bearing: -15
 });
+
+// 🔥 한국어 지도
+map.addControl(new MapboxLanguage({
+  defaultLanguage: 'ko'
+}));
+
 
 // 마커 DOM 생성
 const markerEl = document.createElement('div');
