@@ -6,6 +6,8 @@
 <title>명절놀이</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
 <style>
 * { box-sizing: border-box; }
@@ -79,6 +81,88 @@ body::after {
   margin-bottom: 12px;
   opacity: .6;
 }
+
+/* 맵박스 */
+.map-box {
+  margin: 24px auto 0;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+}
+
+.map-box img {
+  width: 100%;
+  display: block;
+  filter: brightness(.85) contrast(1.1);
+}
+
+.map-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: .5px;
+  backdrop-filter: blur(6px);
+}
+
+#map {
+  width: 100%;
+  height: 220px;
+}
+
+.landmark-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  background: rgba(255,85,85,.15);
+  color: #ff7777;
+  border: 1px solid rgba(255,85,85,.4);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 18px rgba(255,85,85,.35);
+  z-index: 5;
+}
+
+.pulse-marker {
+  width: 18px;
+  height: 18px;
+  background: #ff5555;
+  border-radius: 50%;
+  position: relative;
+}
+
+.pulse-marker::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: rgba(255,85,85,.35);
+  animation: pulse 1.8s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+
+
 
 /* PLAYER SLIDER */
 .player-slider {
@@ -172,10 +256,19 @@ body::after {
     <div class="title-divider"></div>
   </div>
 
-  <div class="info">
-    일시 · 2026년 02월 15일 (일)<br>
-    장소 · 000 풋살장
-  </div>
+ <div class="info">
+  일시 · 2026년 02월 15일 (일)<br>
+  장소 · 2026년 02월 15일 (일)
+</div>
+
+
+<div class="map-box">
+  <div id="map"></div>
+  <div class="landmark-badge">🏟️ 킹주니어스포츠클럽 1호점</div>
+
+</div>
+
+
 
   <div class="section-title">LINEUP</div>
   <div class="player-slider" id="slider">
@@ -215,6 +308,33 @@ body::after {
 <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
 <script>
+/* =========================
+   그머냐 지도
+========================= */
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiY2QxMDcwazk4NyIsImEiOiJjbWw2NWRncmwwYjlnM2Rwc2V0cW5yOTQ5In0.-qaPu_aFc3AxOvJe9GeUSA';
+
+const CENTER = [127.113332, 37.412828];
+
+// 지도 생성
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/dark-v11',
+  center: CENTER,
+  zoom: 16,
+  pitch: 50,
+  bearing: -15
+});
+
+// 마커 DOM 생성
+const markerEl = document.createElement('div');
+markerEl.className = 'pulse-marker';
+
+// 랜드마크 핀 추가
+new mapboxgl.Marker(markerEl)
+  .setLngLat(CENTER)
+  .addTo(map);
+
 /* =========================
    BGM – 첫 터치/클릭 시작
 ========================= */
