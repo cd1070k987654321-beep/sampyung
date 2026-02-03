@@ -426,6 +426,71 @@ body::after {
 }
 
 
+/* PLACE SLIDER */
+.place-slider {
+  margin: 18px auto 0;
+  overflow: hidden;
+}
+
+.place-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+}
+
+.place-card {
+  min-width: 240px;
+  height: 140px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  box-shadow: 0 14px 30px rgba(0,0,0,.45);
+}
+
+.place-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(.9) contrast(1.1);
+}
+
+/* NAVER MAP BUTTON */
+.naver-map-btn {
+  display: block;
+  margin: 18px auto 0;
+  max-width: 360px;
+  text-align: center;
+
+  padding: 14px 16px;
+  border-radius: 14px;
+
+  font-size: 14px;
+  letter-spacing: .5px;
+  text-decoration: none;
+
+  color: #6fd0ff;
+  background: rgba(111, 208, 255, 0.08);
+  border: 1px solid rgba(111, 208, 255, 0.35);
+
+  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.naver-map-btn:hover {
+  background: rgba(111, 208, 255, 0.14);
+  border-color: rgba(111, 208, 255, 0.55);
+}
+
+.naver-map-btn:active {
+  transform: scale(0.97);
+}
+
+
 /* 공백 */
 .page-spacer {
   height: 60vh; /* 화면의 60% 만큼 여백 */
@@ -461,8 +526,25 @@ body::after {
 <div class="map-box">
   <div id="map"></div>
   <div class="landmark-badge">🏟️ 킹주니어스포츠클럽 1호점</div>
-
 </div>
+
+<!-- PLACE PHOTO SLIDER -->
+<div class="place-slider">
+  <div class="place-track">
+    <div class="place-card"><img src="place/1.jpg" alt=""></div>
+    <div class="place-card"><img src="place/2.jpg" alt=""></div>
+    <div class="place-card"><img src="place/3.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- NAVER MAP BUTTON -->
+<a
+  href="https://map.naver.com/v5/search/킹주니어스포츠클럽%201호점"
+  target="_blank"
+  class="naver-map-btn"
+>
+  네이버지도에서 열기
+</a>
 
 
 
@@ -657,6 +739,7 @@ body::after {
   </div>
 
 </div>
+
 
 
 <div class="page-spacer"></div>
