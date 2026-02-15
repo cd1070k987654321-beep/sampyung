@@ -497,6 +497,82 @@ body::after {
 }
 
 
+/* RESULT LIST */
+.result-box {
+  margin-top: 24px;
+  padding: 18px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+}
+
+/* 중앙 정렬 핵심 */
+.match-row {
+  display: flex;
+  flex-direction: column;   /* 세로 배치 */
+  align-items: center;      /* 가로 중앙 */
+  justify-content: center;  /* 세로 중앙 */
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.match-row:last-of-type {
+  border-bottom: none;
+}
+
+.match-title {
+  font-size: 13px;
+  opacity: 0.6;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.match-score {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.team.a { color: #6fd0ff; }
+.team.b { color: #ff9f9f; }
+
+.score {
+  margin: 0 8px;
+  font-weight: 600;
+}
+
+/* FINAL WINNER */
+.final-winner {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 1px;
+
+  color: #ffd166;
+  text-shadow:
+    0 0 8px rgba(255, 209, 102, 0.6),
+    0 0 18px rgba(255, 209, 102, 0.35);
+}
+
+
+.scorer-box {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.scorer.a { color: #6fd0ff; }
+.scorer.b { color: #ff9f9f; }
+
+
+
 </style>
 </head>
 
@@ -664,14 +740,14 @@ body::after {
     </div>
 
       <div class="player-card">
-      <img src="players/k.png">
+      <img src="players/a.png">
       <div class="player-info">
         <div class="player-name">김승민</div>
         <div class="player-stars">★★★</div>
       </div>
 
           <div class="player-card">
-      <img src="players/j.png">
+      <img src="players/a.png">
       <div class="player-info">
         <div class="player-name">이준헌</div>
         <div class="player-stars">★★★</div>
@@ -760,6 +836,14 @@ body::after {
   </div>
 
 </div>
+
+
+<!-- RESULT SECTION -->
+<div class="section-title">MATCH RESULT</div>
+
+<div class="result-box" id="resultBox"></div>
+<div class="final-winner" id="finalWinner"></div>
+
 
 
 
@@ -873,6 +957,62 @@ slider.addEventListener('mouseleave', () => isPaused = false);
 slider.addEventListener('touchstart', () => isPaused = true);
 slider.addEventListener('touchend', () => isPaused = false);
 
+
+/* =========================
+   RESULT – Google Sheets 연동
+========================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbx6S7FwAi2lZ4xlBCclpsTmf3ax9G10RUkNrp_SwZYpzRFuiFuTgtUHY5y0oemKt9aU4g/exec";
+
+async function loadResults() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const box = document.getElementById("resultBox");
+    const winnerEl = document.getElementById("finalWinner");
+
+    let html = "";
+    let aWin = 0;
+    let bWin = 0;
+
+    data.forEach(d => {
+      const a = Number(d.teamA_score) || 0;
+      const b = Number(d.teamB_score) || 0;
+
+      if (a > b) aWin++;
+      else if (b > a) bWin++;
+
+      html += `
+        <div class="match-row">
+          <div class="match-title">${d.match}</div>
+          <div class="match-score">
+            <span class="team a">A</span>
+            <span class="score">${a} : ${b}</span>
+            <span class="team b">B</span>
+          </div>
+
+          <div class="scorer-box">
+            <div class="scorer a">A: ${d.scorersA || "-"}</div>
+            <div class="scorer b">B: ${d.scorersB || "-"}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    box.innerHTML = html;
+
+    const finalWinner =
+      aWin > bWin ? "TEAM A" :
+      bWin > aWin ? "TEAM B" : "무승부";
+
+    winnerEl.innerHTML = `🏆 최종 승자 · ${finalWinner}`;
+
+  } catch (err) {
+    console.error("결과 불러오기 실패:", err);
+  }
+}
+
+loadResults();
 
 
 </script>
